@@ -35,8 +35,19 @@ public:
     ~FileExistsDialog();
     enum {clickedRename = 2, clickedOverwrite, clickedSkip}; //QDialog::Rejected = 0    QDialog::Accepted = 1
 
+    QPixmap preparePixmap(const QString path, const int length);
+    /* Creates an QPixmap, adjusts its scale so that it
+     * fits into a square window of size 'length' and rotates it if necessary */
+
 private:
     Ui::FileExistsDialog *ui;
+
+    qreal getMin(const qreal a, const qreal b)
+    {
+        qreal result;
+        result = a <= b ? a : b;
+        return result;
+    }
 };
 
 #endif // FILEEXISTSDIALOG_H

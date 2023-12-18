@@ -21,7 +21,9 @@
 
 #include <QFileInfo>
 #include <QDateTime>
-#include <QTime>
+#include <QPixmap>
+#include <QImageReader>
+#include <QTransform>
 
 FileExistsDialog::FileExistsDialog(QWidget *parent, QString source, QString destination) :
     QDialog(parent),
@@ -39,7 +41,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, QString source, QString dest
     ui->destinationLabel->setText("File existing in <font color='#335eff'>" + destinationFolder + "</font>");
 
     QFileInfo fileInfo(destination);
-    QDateTime dateTime = fileInfo.birthTime(); //or lastModified()
+    QDateTime dateTime = fileInfo.lastModified(); //lastModified() or birthTime()
     QString dateStr = dateTime.toString("dd.MM.yyyy");
     QString timeStr = dateTime.toString("hh:mm:ss");
     double size = fileInfo.size()*1./1024;
@@ -49,13 +51,9 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, QString source, QString dest
     ui->existingFileInfoLabel->setText(info);
 
     //inialize viewer-labels
-    QPixmap leftPix(source);
-    if (leftPix.isNull()) leftPix = QPixmap(":/img/img/icons8-image-file-80.png");
-    QPixmap rightPix(destination);
-    if (rightPix.isNull()) rightPix = QPixmap(":/img/img/icons8-image-file-80.png");
     int len = 80;
-    leftPix = leftPix.scaled(len, len, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    rightPix = rightPix.scaled(len, len, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap leftPix = preparePixmap(source, len);
+    QPixmap rightPix = preparePixmap(destination, len);
     ui->sourceImgLabel->setMaximumSize(len, len); //or leftPix.size()
     ui->destinationImgLabel->setMaximumSize(len, len); //or rightPix.size()
     ui->sourceImgLabel->setPixmap(leftPix);
@@ -72,4 +70,32 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, QString source, QString dest
 FileExistsDialog::~FileExistsDialog()
 {
     delete ui;
+}
+
+QPixmap FileExistsDialog::preparePixmap(const QString path, const int length)
+{
+    QPixmap pix = QPixmap(path);
+    if (pix.isNull()) pix = QPixmap(":/img/img/icons8-image-file-80.png");
+
+    QImageReader imReader(path);
+    qreal theta = 0;
+    switch (imReader.transformation()) {
+    case QImageIOHandler::TransformationRotate90:
+        theta = 90;
+        break;
+    case QImageIOHandler::TransformationRotate180:
+        theta = 180;
+        break;
+    case QImageIOHandler::TransformationRotate270:
+        theta = 270;
+        break;
+    }
+    QSize pixSize = pix.size();
+    qreal scaleFactor = getMin(length*1./pixSize.width(), length*1./pixSize.height());
+    QTransform m;
+    m.scale(scaleFactor, scaleFactor);
+    if (theta) m.rotate(theta);
+    pix = pix.transformed(m, Qt::SmoothTransformation);
+
+    return pix;
 }

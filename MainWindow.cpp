@@ -458,7 +458,7 @@ void MainWindow::showMessage(int valid, int corrupted, int ignored, qint64 gain)
                                   "(The files size has been reduced by %3 MB).\n\n"
                                   "Failed to read %4 file(s):\n\n")
                                             .arg(valid - ignored) //valid-ignored, 0 <= ignored <= valid
-                                            .arg(m_filesCount - ignored) //m_filesCount - ignored
+                                            .arg(m_filesCount - ignored)
                                             .arg(gainInMiB_str)
                                             .arg(corrupted)
                             + m_corruptedFilesList.join("\n");
