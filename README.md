@@ -4,22 +4,22 @@ DownScaler est un outil de redimensionnement et de compression d'images supporta
 
 <img src = "screenshots/DownScalerMainWindow.png" width = 400>
 
-**Sélection des images et du dossier de destination**
+## Sélection des images et du dossier de destination
 
 L'explorateur de fichiers/de dossiers s'ouvrira en utilisant un chemin précédemment enregistré. En particulier, à l'ouverture du programme, il s'agira du chemin enregistré lors de la session précédente.
 
 Si le checkbox "Overwrite the existing files" est coché, les images seront écrites par dessus des existantes.
 Les changements effectués à ce niveau d'interface mettent systématiquement à jour l'affichage des options disponibles pour la dénomination des fichiers.
 
-**Noms des fichiers de sortie**
+## Noms des fichiers de sortie
 
 Les noms peuvent être personnalisés dans le groupBox "Output file names". On peut ajouter un préfixe ou un suffixe au nom d'origine, soit saisir le nom manuellement. Un suffixe incrémental entier sera ajouté à ce dernier si au moins deux fichiers sont sélectionnés.
 
-**Paramètres de redimensionnement et de compression**
+## Paramètres de redimensionnement et de compression
 - La largeur et la hauteur de l'image seront multipliées par un facteur d'échelle choisi divisée par 100 assurant la conservation des proportions de l'image. 
 - L'image sera d'autant plus compressée que le paramètre "Image quality" est petit. Attention, la valeur de qualité supérieure à 80 peut sensiblement augmenter la taille du fichier de sortie.
 
-**Resize and save**
+## Resize and save
 
 Les images sont traitées dans une boucle en appliquant les transformations de rotation présentes dans leurs métadonnées respectives pour préserver l'aspect de l'image d'origine. 
 
